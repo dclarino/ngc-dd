@@ -1,0 +1,26 @@
+from read_real import *
+from gen_qc    import *
+
+from mqt.qcec import Configuration, Strategy, verify
+from qiskit import *
+
+stuff = readRealFile("/home/dclarino/quantum/quantum_programming/rd32_273.real.txt")
+
+#print(stuff)
+
+qc = build_qc(stuff)
+qc.x[qc.qubits[0]]
+qc.x[qc.qubits[0]]
+
+#print(qc)
+stuff2 = readRealFile("/home/dclarino/quantum/quantum_programming/rd32_272.real")
+
+qc2    = build_qc(stuff2)
+
+config          = Configuration()
+config.strategy = Strategy.compilationflow
+result          = verify(qc,qc2,config)
+
+print(result)
+
+print(qc2)
