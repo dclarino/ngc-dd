@@ -1,56 +1,69 @@
 from qiskit import QuantumCircuit
 
-def retrieveGates(qc):
 
-    # Takes a QuantumCircuit object as input, and returns a list of gates in the circuit, in the order they act in the circuit. 
+def retrieve_gates(qc):
+
+    # Takes a QuantumCircuit object as input, and returns a list of gates in the circuit, in the order they act in the circuit.
     # Each gate is of the format (list) [(string) gateName, (list) QubitIndices]
-    # The QubitIndices follow the same format as the Qiskit QuantumCircuit Gates
-    
-    gatesList = []
-    for gate in qc.data:
-        tempList = []
-        tempList.append(gate[0].name)
-        qubitList = []
-        for i in range(len(gate[1])):
-            qubitList.append(gate[1][i].index)
-        tempList.append(qubitList)
-        gatesList.append(tempList)
-    return gatesList
+    # The QubitIndices follow the same format as the Qiskit QuantumCircuit
+    # Gates
 
-def NOTString(qubit):
+    gates_list = []
+    for gate in qc.data:
+        temp_list = []
+        temp_list.append(gate[0].name)
+        qubit_list = []
+        for i in range(len(gate[1])):
+            qubit_list.append(gate[1][i].index)
+        temp_list.append(qubit_list)
+        gates_list.append(temp_list)
+    return gates_list
+
+
+def not_string(qubit):
 
     # Takes a qubit as input, and returns the string representation of the NOT gate on that qubit
-    # Brackets are added to prevent ambiguity in the string representation of the circuit
+    # Brackets are added to prevent ambiguity in the string representation of
+    # the circuit
 
     qubit = '( ¬ ' + qubit + ' )'
     return qubit
 
-def cNOTString(qubitControl, qubitTarget):
-    qubitTarget = ' ( ( ¬ ' + qubitTarget + ' ) /\\ ' + qubitControl + ' ) \\/ ( ' + qubitTarget + ' /\\ ( ¬ ' + qubitControl + ' ) )'
-    return qubitTarget
 
-def toffoliString(qubitControlOne, qubitControlTwo, qubitTarget):
+def cnot_string(qubit_control, qubit_target):
+    qubit_target = ' ( ( ¬ ' + qubit_target + ' ) /\\ ' + qubit_control + \
+        ' ) \\/ ( ' + qubit_target + ' /\\ ( ¬ ' + qubit_control + ' ) )'
+    return qubit_target
+
+
+def toffoli_string(qubit_control_one, qubit_control_two, qubit_target):
 
     # Takes a qubit as input, and returns the string representation of the Toffoli gate with first two arguments as control bits and the third as target bits
-    # Brackets are added to prevent ambiguity in the string representation of the circuit
-    
-    qubitTarget = ' ( ( ¬ ' + qubitTarget + ' )' + ' /\\ ( ' + qubitControlOne + ' /\\ ' + qubitControlTwo + ' ) ) ' + '\\/ ( ' + qubitTarget + ' /\\' + ' ( ¬ ( ' + qubitControlOne + ' /\\ ' + qubitControlTwo + ' ) ) )'
-    return qubitTarget
+    # Brackets are added to prevent ambiguity in the string representation of
+    # the circuit
+
+    qubit_target = ' ( ( ¬ ' + qubit_target + ' )' + ' /\\ ( ' + qubit_control_one + ' /\\ ' + qubit_control_two + ' ) ) ' + \
+        '\\/ ( ' + qubit_target + ' /\\' + ' ( ¬ ( ' + qubit_control_one + ' /\\ ' + qubit_control_two + ' ) ) )'
+    return qubit_target
+
 
 def get_qc_string(qc):
-    gateList = retrieveGates(qc)
-    #prepares the initial state of qubits
-    qubitStates = []
+    gate_list = retrieve_gates(qc)
+    # prepares the initial state of qubits
+    qubit_states = []
     for i in range(len(qc.qubits)):
-        qubitStates.append('q' + str(i))
+        qubit_states.append('q' + str(i))
 
-    #applies the circuit gates to the qubits and modifies the qubitStates list in place
-    for gate in gateList:
+    # applies the circuit gates to the qubits and modifies the qubit_states
+    # list in place
+    for gate in gate_list:
         if gate[0] == 'ccx':
-            qubitStates[gate[1][2]] = toffoliString(qubitStates[gate[1][0]], qubitStates[gate[1][1]], qubitStates[gate[1][2]])
+            qubit_states[gate[1][2]] = toffoli_string(
+                qubit_states[gate[1][0]], qubit_states[gate[1][1]], qubit_states[gate[1][2]])
         elif gate[0] == 'x':
-            qubitStates[gate[1][0]] = NOTString(qubitStates[gate[1][0]])
+            qubit_states[gate[1][0]] = not_string(qubit_states[gate[1][0]])
         elif gate[0] == 'cx':
-            qubitStates[gate[1][1]] = cNOTString(qubitStates[gate[1][0]], qubitStates[gate[1][1]])
+            qubit_states[gate[1][1]] = cnot_string(
+                qubit_states[gate[1][0]], qubit_states[gate[1][1]])
 
-    return qubitStates
+    return qubit_states
