@@ -18,12 +18,13 @@ bdd.dump('bdd0.pdf',roots=[u])
 d = dict(q1=bdd.add_expr(r'~q1'))
 bdd.collect_garbage()
 v = bdd.let(d,u)
+final = u & v
 #v = ~ v
 #BDD.reorder(bdd)
 
 bdd.collect_garbage()
-bdd.dump('bdd.pdf')
-#bdd.dump('bdd.pdf',roots=[v])
+#bdd.dump('bdd.pdf')
+bdd.dump('bdd.pdf',roots=[final])
 
 #qc = QuantumCircuit(4)
 #qc.x(1)
