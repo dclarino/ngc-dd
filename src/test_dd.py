@@ -6,6 +6,7 @@ bdd  = BDD()
 
 bdd.declare('q0','q1','q2','q3')
 
+#simulate an and gate
 u = bdd.add_expr(r'q0 /\ q1')  # symbols `&`, `|` are supported too 
     # note the "r" before the quote, which signifies a raw string and is
     # needed to allow for the backslash
@@ -18,6 +19,7 @@ x        = bdd.add_expr(r'~q0')
 d        = dict(q0=x)
 bdd.collect_garbage()
 
+#replace q0 with bdd for ~q0 to simulate adding a NOT gate before AND on q0
 bdd_act  = bdd.let(d,u)
 
 bdd.collect_garbage()
