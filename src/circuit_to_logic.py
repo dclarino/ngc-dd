@@ -47,7 +47,7 @@ def toffoli_string(qubit_control_one, qubit_control_two, qubit_target):
     return qubit_target
 
 
-def get_qc_bdd(qc):
+def get_qc_bdd(qc,bdd):
     gate_list = retrieve_gates(qc)
     # prepares the initial state of qubits
     qubit_states = []
@@ -66,4 +66,5 @@ def get_qc_bdd(qc):
             qubit_states[gate[1][1]] = cnot_string(
                 qubit_states[gate[1][0]], qubit_states[gate[1][1]])
 
-    return qubit_states
+    return bdd.add_expr('q0')
+    #return qubit_states
