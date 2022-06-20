@@ -26,13 +26,13 @@ def not_string(qubit):
     # Brackets are added to prevent ambiguity in the string representation of
     # the circuit
 
-    qubit = '( ¬ ' + qubit + ' )'
+    qubit = '( ~ ' + qubit + ' )'
     return qubit
 
 
 def cnot_string(qubit_control, qubit_target):
-    qubit_target = ' ( ( ¬ ' + qubit_target + ' ) /\\ ' + qubit_control + \
-        ' ) \\/ ( ' + qubit_target + ' /\\ ( ¬ ' + qubit_control + ' ) )'
+    qubit_target = ' ( ( ~ ' + qubit_target + ' ) /\\ ' + qubit_control + \
+        ' ) \\/ ( ' + qubit_target + ' /\\ ( ~ ' + qubit_control + ' ) )'
     return qubit_target
 
 
@@ -42,8 +42,8 @@ def toffoli_string(qubit_control_one, qubit_control_two, qubit_target):
     # Brackets are added to prevent ambiguity in the string representation of
     # the circuit
 
-    qubit_target = ' ( ( ¬ ' + qubit_target + ' )' + ' /\\ ( ' + qubit_control_one + ' /\\ ' + qubit_control_two + ' ) ) ' + \
-        '\\/ ( ' + qubit_target + ' /\\' + ' ( ¬ ( ' + qubit_control_one + ' /\\ ' + qubit_control_two + ' ) ) )'
+    qubit_target = ' ( ( ~ ' + qubit_target + ' )' + ' /\\ ( ' + qubit_control_one + ' /\\ ' + qubit_control_two + ' ) ) ' + \
+        '\\/ ( ' + qubit_target + ' /\\' + ' ( ~ ( ' + qubit_control_one + ' /\\ ' + qubit_control_two + ' ) ) )'
     return qubit_target
 
 
@@ -65,6 +65,8 @@ def get_qc_bdd(qc,bdd):
         elif gate[0] == 'cx':
             qubit_states[gate[1][1]] = cnot_string(
                 qubit_states[gate[1][0]], qubit_states[gate[1][1]])
-
-    return bdd.add_expr('q0')
-    #return qubit_states
+    
+    bdd_list = []
+    for i in range(len(qc.qubits)):
+        bdd_list.append(bdd.add_expr(qubit_states[i]))
+    return bdd_list
