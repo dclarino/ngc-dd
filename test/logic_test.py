@@ -6,6 +6,7 @@ import graphviz
 
 import pytest
 from qiskit import QuantumCircuit
+from qiskit.circuit import classical_function,  Int1
 
 sys.path.append(os.path.join('../src'))
 print(sys.path)
@@ -62,7 +63,29 @@ class CircuitToLogicTests(object):
         bdd_act_list = get_qc_bdd(qc,bdd)
         for i in range(len(bdd_exp_list)):
             print(bdd_exp_list[i] == bdd_act_list[i], (bdd_exp_list[i], bdd_act_list[i]))
-    
+
+    def test_mpmct(self):
+        bdd = BDD()
+        bdd.declare('q0','q1','q2')
+
+        @classical_function
+        def mpmct(q0: Int1, q1: Int1, q2: Int1) -> Int1:
+            return (not q0 and q1 and q2)
+
+        qc = mpmct.synth()
+
+        bdd_exp_list = []
+        bdd_exp_list.append(bdd.add_expr(r'q0'))
+        bdd_exp_list.append(bdd.add_expr(r'q1'))
+        bdd_exp_list.append(bdd.add_expr(r'q2'))
+        bdd_exp_list.append(bdd.add_expr(r"~q0 & q1 & q2"))
+
+        bdd_act_list = get_qc_bdd(qc,bdd)
+
+        for i in range(len(bdd_exp_list)):
+            assert bdd_exp_list[i] == bdd_act_list[i], (bdd_exp_list[i], bdd_act_list[i])
+
+            
     def test_circ(self):
         # example Qiskit Circuit
         bdd = BDD()
