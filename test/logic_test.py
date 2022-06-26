@@ -64,14 +64,14 @@ class CircuitToLogicTests(object):
         for i in range(len(bdd_exp_list)):
             print(bdd_exp_list[i] == bdd_act_list[i], (bdd_exp_list[i], bdd_act_list[i]))
 
-    def test_mpmct(self):
+    def not_test_mpmct(self):
         bdd = BDD()
-        bdd.declare('q0','q1','q2')
+        bdd.declare('q0','q1','q2','q3')
 
         @classical_function
         def mpmct(q0: Int1, q1: Int1, q2: Int1) -> Int1:
             return (not q0 and q1 and q2)
-
+        
         qc = mpmct.synth()
 
         bdd_exp_list = []
