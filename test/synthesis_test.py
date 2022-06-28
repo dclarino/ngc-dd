@@ -14,10 +14,60 @@ sys.path.append(os.path.join('../src'))
 print(sys.path)
 
 
-from circuit_synthesis import synthesize
+from circuit_synthesis import synthesize,calculate
 
 class SynthesisTests(object):
-    def test_paper_example(self):
+    def test_calc_simp(self):
+        bdd = BDD()
+        bdd.declare('x0','x1','x2','x3','x4')
+
+        qr = QuantumRegister(5, 'x')
+        qc = QuantumCircuit(qr)
+        #Sousai paper Fig 4
+        qc.cx(qr[0],qr[1])
+
+        qc.ccx(qr[0],qr[1],qr[2])
+        qc.ccx(qr[0],qr[2],qr[1])
+        qc.ccx(qr[1],qr[2],qr[3])
+        qc.ccx(qr[2],qr[1],qr[0])
+        qc.ccx(qr[0],qr[2],qr[3])
+        qc.ccx(qr[0],qr[1],qr[3])
+
+        qc.cx(qr[1],qr[2])
+        qc.cx(qr[2],qr[0])
+
+        qc.ccx(qr[0],qr[2],qr[1])
+        qc.ccx(qr[1],qr[2],qr[3])
+        qc.ccx(qr[0],qr[2],qr[3])
+        qc.ccx(qr[0],qr[1],qr[3])
+
+        #reverse input
+        qc.ccx(qr[0],qr[2],qr[1])        
+        qc.cx(qr[2],qr[0])        
+        qc.cx(qr[1],qr[2])
+        qc.ccx(qr[2],qr[1],qr[0])
+        qc.ccx(qr[0],qr[2],qr[1])
+        qc.ccx(qr[0],qr[1],qr[2])
+        qc.cx(qr[0],qr[1])
+
+        exp_phase_function = []
+        exp_phase_function.append(bdd.add_expr(("(~x0 & ~x1 & ~x2) | "
+                                                "(x0 & x1 & ~x2) | "
+                                                "(x0 & ~x1 & x2) ")))
+        exp_phase_function.append(bdd.add_expr('False'))
+        exp_phase_function.append(bdd.add_expr(r'~x0 & x1 & x2'))
+        exp_phase_function.append(bdd.add_expr(("(x0 & ~x1 & ~x2) | "
+                                                "(~x0 & x1 & ~x2) | "
+                                                "(~x0 & ~x1 & x2) | "
+                                                "(x0 & x1 & x2)")))
+
+        act_phase_function = calculate(qc,bdd)
+
+        for i in range(len(exp_phase_function)):
+            assert exp_phase_function[i] == act_phase_function[i], (exp_phase_function[i], act_phase_function[i])
+
+
+    def dont_test_paper_example(self):
         qr = QuantumRegister(5, 'x')
 
         #Declare BDDs
