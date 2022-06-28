@@ -62,7 +62,7 @@ class CircuitToLogicTests(object):
 
         bdd_act_list = get_qc_bdd(qc,bdd)
         for i in range(len(bdd_exp_list)):
-            print(bdd_exp_list[i] == bdd_act_list[i], (bdd_exp_list[i], bdd_act_list[i]))
+            assert bdd_exp_list[i] == bdd_act_list[i], (bdd_exp_list[i], bdd_act_list[i])
 
     def not_test_mpmct(self):
         bdd = BDD()
@@ -103,7 +103,7 @@ class CircuitToLogicTests(object):
         bdd_act_list = get_qc_bdd(qc,bdd)
 
         for i in range(len(bdd_exp_list)):
-            print(bdd_exp_list[i] == bdd_act_list[i], (bdd_exp_list[i], bdd_act_list[i]))
+            assert bdd_exp_list[i] == bdd_act_list[i], (bdd_exp_list[i], bdd_act_list[i])
 
         
 
