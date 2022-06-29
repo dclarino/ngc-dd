@@ -96,7 +96,7 @@ class CircuitToLogicTests(object):
         qc.cx(0, 1)
 
         bdd_exp_list = []
-        bdd_exp_list.append(bdd.add_expr(r' ~ q0'))
+        bdd_exp_list.append(bdd.add_expr(r' q0'))
         bdd_exp_list.append(bdd.add_expr(r"( ( q0 ) /\ q1 ) \/ ( ~q0 /\ ~q1 )"))
         bdd_exp_list.append(bdd.add_expr(r'q2'))
 
