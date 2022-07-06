@@ -29,6 +29,23 @@ def not_string(qubit):
     qubit = '( ~ ' + qubit + ' )'
     return qubit
 
+def and_string(qubit_one, qubit_two):
+
+    # Takes a qubit as input, and returns the string representation of the NOT gate on that qubit
+    # Brackets are added to prevent ambiguity in the string representation of
+    # the circuit
+
+    qubit = '( '+ qubit_one + ' /\\ ' + qubit_two + ' )'
+    return qubit
+
+def or_string(qubit_one, qubit_two):
+
+    # Takes a qubit as input, and returns the string representation of the NOT gate on that qubit
+    # Brackets are added to prevent ambiguity in the string representation of
+    # the circuit
+
+    qubit = '( '+ qubit_one + ' \\/ ' + qubit_two + ' )'
+    return qubit
 
 def cnot_string(qubit_control, qubit_target):
     qubit_target = ' ( ( ~ ' + qubit_target + ' ) /\\ ' + qubit_control + \
