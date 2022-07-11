@@ -25,7 +25,10 @@ def not_string(qubit):
     # Takes a qubit as input, and returns the string representation of the NOT gate on that qubit
     # Brackets are added to prevent ambiguity in the string representation of
     # the circuit
-
+    if (qubit == 'True'):
+        return 'False'
+    if (qubit == 'False'):
+        return 'True'
     qubit = '( ~ ' + qubit + ' )'
     return qubit
 
@@ -35,6 +38,13 @@ def and_string(qubit_one, qubit_two):
     # Brackets are added to prevent ambiguity in the string representation of
     # the circuit
 
+    if (qubit_one == 'False') or (qubit_two == 'False'):
+        return 'False'
+
+    if (qubit_one == 'True'):
+        return qubit_two
+    if (qubit_two == 'True'):
+        return qubit_one
     qubit = '( '+ qubit_one + ' /\\ ' + qubit_two + ' )'
     return qubit
 
@@ -43,7 +53,14 @@ def or_string(qubit_one, qubit_two):
     # Takes a qubit as input, and returns the string representation of the NOT gate on that qubit
     # Brackets are added to prevent ambiguity in the string representation of
     # the circuit
+    if (qubit_one == 'True') or (qubit_two == 'True'):
+        return 'True'
 
+    if (qubit_one == 'False'):
+        return qubit_two
+    if (qubit_two == 'False'):
+        return qubit_one
+    
     qubit = '( '+ qubit_one + ' \\/ ' + qubit_two + ' )'
     return qubit
 
