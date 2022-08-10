@@ -15,6 +15,26 @@ print(sys.path)
 from circuit_to_logic import *
 
 class CircuitToLogicTests(object):
+
+    def test_and(self):
+        assert and_string('True', 'True') == 'True'
+        assert and_string('True', 'False') == 'False'
+        assert and_string('False', 'True') == 'False'
+        assert and_string('False', 'False') == 'False'
+        assert and_string('False', 'q0') == 'False'
+        assert and_string('q0', 'False') == 'False'
+        assert and_string('q0', 'q1') == '( q0 /\\ q1 )'
+
+    def test_or(self):
+        assert or_string('True', 'True') == 'True'
+        assert or_string('True', 'False') == 'True'
+        assert or_string('False', 'True') == 'True'
+        assert or_string('False', 'False') == 'False'
+        assert or_string('False', 'q0') == 'q0'
+        assert or_string('q0', 'False') == 'q0'
+        assert or_string('q0', 'q1') == '( q0 \\/ q1 )'
+
+
     def test_not(self):
         bdd = BDD()
         bdd.declare('q0')
