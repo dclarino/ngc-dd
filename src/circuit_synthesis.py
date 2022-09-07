@@ -1,6 +1,14 @@
 from qiskit import QuantumCircuit,QuantumRegister
 from dd.autoref import BDD
-from src.circuit_to_logic import *
+
+#from src.circuit_to_logic import *
+import logging
+import os
+import sys
+sys.path.append(os.path.join('../src'))
+# print(sys.path)
+
+from circuit_to_logic import *
 
 def calculate(qc,bdd):
     

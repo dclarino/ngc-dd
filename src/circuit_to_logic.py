@@ -20,7 +20,7 @@ def retrieve_gates(qc):
     return gates_list
 
 
-def not_string(qubit):
+def not_bdd(qubit):
 
     # Takes a qubit as input, and returns the string representation of the NOT gate on that qubit
     # Brackets are added to prevent ambiguity in the string representation of
@@ -32,7 +32,7 @@ def not_string(qubit):
     qubit = '( ~ ' + qubit + ' )'
     return qubit
 
-def and_string(qubit_one, qubit_two):
+def and_bdd(qubit_one, qubit_two):
 
     # Takes a qubit as input, and returns the string representation of the NOT gate on that qubit
     # Brackets are added to prevent ambiguity in the string representation of
@@ -46,9 +46,10 @@ def and_string(qubit_one, qubit_two):
     if (qubit_two == 'True'):
         return qubit_one
     qubit = '( '+ qubit_one + ' /\\ ' + qubit_two + ' )'
+    
     return qubit
 
-def or_string(qubit_one, qubit_two):
+def or_bdd(qubit_one, qubit_two):
 
     # Takes a qubit as input, and returns the string representation of the NOT gate on that qubit
     # Brackets are added to prevent ambiguity in the string representation of
@@ -64,13 +65,13 @@ def or_string(qubit_one, qubit_two):
     qubit = '( '+ qubit_one + ' \\/ ' + qubit_two + ' )'
     return qubit
 
-def cnot_string(qubit_control, qubit_target):
+def cnot_bdd(qubit_control, qubit_target):
     qubit_target = ' ( ( ~ ' + qubit_target + ' ) /\\ ' + qubit_control + \
         ' ) \\/ ( ' + qubit_target + ' /\\ ( ~ ' + qubit_control + ' ) )'
     return qubit_target
 
 
-def toffoli_string(qubit_control_one, qubit_control_two, qubit_target):
+def toffoli_bdd(qubit_control_one, qubit_control_two, qubit_target):
 
     # Takes a qubit as input, and returns the string representation of the Toffoli gate with first two arguments as control bits and the third as target bits
     # Brackets are added to prevent ambiguity in the string representation of
@@ -92,12 +93,12 @@ def get_qc_bdd(qc,bdd):
     # list in place
     for gate in gate_list:
         if gate[0] == 'ccx':
-            qubit_states[gate[1][2]] = toffoli_string(
+            qubit_states[gate[1][2]] = toffoli_bdd(
                 qubit_states[gate[1][0]], qubit_states[gate[1][1]], qubit_states[gate[1][2]])
         elif gate[0] == 'x':
-            qubit_states[gate[1][0]] = not_string(qubit_states[gate[1][0]])
+            qubit_states[gate[1][0]] = not_bdd(qubit_states[gate[1][0]])
         elif gate[0] == 'cx':
-            qubit_states[gate[1][1]] = cnot_string(
+            qubit_states[gate[1][1]] = cnot_bdd(
                 qubit_states[gate[1][0]], qubit_states[gate[1][1]])
     
     bdd_list = []
